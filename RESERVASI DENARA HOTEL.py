@@ -706,32 +706,27 @@ elif pilihan_menu == "⭐ Ulasan Kepuasan":
     st.title("⭐ Kotak Kepuasan & Review Tamu")
     st.write("Bagikan pengalaman menginapmu! Feedback kamu sangat berharga bagi kami.")
 
-    # Form input ulasan
-    with st.form("form_ulasan", clear_on_submit=True):
-        nama_tamu = st.text_input("Nama atau Nomor Kamar")
-        #custom star 
-        st.write("Berapa Bintang Untuk Kami?")
-        col_bintang = st.columns(5)
-        for i in range(5):
-            if col_bintang[i].button("⭐", key=f"star_{i+1}"):
-                st.session_state.temp_rating = i + 1
-                st.rerun()
-                
-        st.info(f"Rating terpilih: {st.session_state.temp_rating} Bintang")
-        komentar_tamu = st.text_area("Tulis kesan-pesan kamu:")
-        
-        if st.form_submit_button("Kirim Review ✨"):
-            if nama_tamu and st.session_state.temp_rating > 0:
-                st.session_state.ulasan_log.append({
-                    "nama": nama_tamu, 
-                    "rating": st.session_state.temp_rating, 
-                    "komentar": komentar_tamu
-                })
-                st.balloons()
-                st.success("Terima kasih telah berbagi pengalaman dengan kami")
-                st.session_state.temp_rating = 0 # Reset rating
-            else:
-                st.error("Jangan lupa isi nama dan pilih bintangnya ya!")
+    # menggunakan radio button horizontal sebagai pemilih bintang
+    skor_rating = st.radio(
+        "Berapa Bintang Untuk Kami"
+        options=[1, 2, 3, 4, 5],
+        format_func=lambda x: "⭐" * x,
+        horizontal =True,
+        index=4 # default 5 bintang
+    )
+    komentar_tamu = st.text_area("Tulis kesan-pesan kamu:")
+    if st.form_submit_button("Kirim Review ✨"):
+        if nama_tamu and komentar_tamu:
+            st.session_state.ulasan_log.append({
+                "nama": nama_tamu, 
+                "rating": skor_rating, 
+                "komentar": komentar_tamu
+            })
+            st.balloons()
+            st.success("Terima kasih telah berbagi pengalaman dengan kami")
+            st.session_state.temp_rating = 0 # Reset rating
+        else:
+            st.error("Jangan lupa isi nama dan pilih bintangnya ya!")
             
     st.markdown("---")
     st.subheader("💬 Apa Kata Tamu Lain?")
