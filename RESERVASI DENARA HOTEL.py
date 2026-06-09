@@ -323,7 +323,7 @@ elif pilihan_menu == "💳 Pembayaran Reservasi Hotel":
     else:
         # menampilkan timer
         with timer_placeholder.container():
-            st.warning("⏳ Harap Selesaikan Pembayaran Dalam: **{sisa_detik // 60} menit {sisa_detik % 60} detik** lagi.")
+            st.warning(f"⏳ Harap Selesaikan Pembayaran Dalam: **{sisa_detik // 60} menit {sisa_detik % 60} detik** lagi.")
     
     # ----------------------------------
 
