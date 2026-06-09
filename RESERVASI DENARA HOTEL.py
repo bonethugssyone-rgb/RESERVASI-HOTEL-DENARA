@@ -766,16 +766,46 @@ elif pilihan_menu == "❓ Pusat Bantuan":
 
 # --- 12. KONTAK LAYANAN SERVICE ---
 elif pilihan_menu == "📞 Kontak Layanan Service":
-    st.title("📞 Kontak Hubung & Layanan Fast Respon")
-    # Informasi kontak darurat hotel buat kenyamanan dan rasa aman tamu selama menetap
-    st.markdown("""
-    <div class="card">
-        <h3>Layanan Operator Resepsionis (24 Jam Nonstop)</h3>
-        <p>Hubungi kontak di bawah kalau ada masalah darurat di kamar atau butuh bantuan teknisi.</p>
-        <ul>
-            <li><b>Telpon Kamar:</b> Pencet angka 0 langsung ke resepsionis</li>
-            <li><b>WhatsApp Chat:</b> 0812-3456-7890</li>
-            <li><b>Email Support:</b> care@denarahotel.com</li>
-        </ul>
-    </div>
-    """, unsafe_allow_html=True)
+    st.title("📞 Kontak Layanan Hotel")
+
+    # Informasi Hotel dengan Layout yang rapi
+    col1, col2 = st.columns([1, 2])
+    with col1:
+        st.write("🏨 **Denara Hotel**")
+        st.write("📍 **Alamat:**")
+        st.caption("Jl. Mawar No. 123, Indonesia")
+        st.write("📞 **Telepon:**")
+        st.caption("0812-3456-7890")
+        st.write("📧 **Email:**")
+        st.caption("denarahotel@gmail.com")
+    
+    with col2:
+        st.info("🕒 **Layanan Resepsionis 24 Jam**\nJangan ragu untuk menghubungi kami kapan saja jika Anda membutuhkan bantuan darurat atau layanan kamar.")
+
+    st.divider()
+
+    # Form Kirim Pesan yang lebih terstruktur
+    st.subheader("📩 Kirim Pesan ke Customer Service")
+    with st.form("form_kontak", clear_on_submit=True):
+        nama = st.text_input("Nama Lengkap")
+        subjek = st.text_input("Subjek Pesan")
+        pesan = st.text_area("Pesan Anda")
+        
+        submit_btn = st.form_submit_button("Kirim Pesan Sekarang 🚀")
+        
+        if submit_btn:
+            if nama and pesan:
+                # Disini kita bisa menyimpan pesan ke dalam sebuah list log khusus
+                # Jika ingin membuat log pesan baru, tambahkan 'pesan_masuk' ke st.session_state di bagian awal
+                if "pesan_masuk" not in st.session_state:
+                    st.session_state.pesan_masuk = []
+                
+                st.session_state.pesan_masuk.append({
+                    "nama": nama,
+                    "subjek": subjek,
+                    "pesan": pesan
+                })
+                
+                st.success(f"Terima kasih, {nama}! Pesan Anda telah kami terima dan akan segera diproses oleh tim kami.")
+            else:
+                st.error("Mohon isi Nama dan Pesan Anda terlebih dahulu.")
