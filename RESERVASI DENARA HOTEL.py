@@ -205,15 +205,6 @@ elif pilihan_menu == "📝 Reservasi Baru":
         st.subheader("🤖 Saran Kamar Dari Bot")
         saran = "Standard Room" if jml_tamu <= 2 else ("Superior Room" if jml_tamu <= 4 else "Suite Room")
         st.info(f"Karena kamu bawa {jml_tamu} orang, cocoknya pilih **{saran}**.")
-        
-        pemetaan_lantai = {"Standard Room": "1", "Superior Room": "2", "Deluxe Room": "3", "Suite Room": "4"}
-        lantai_target = pemetaan_lantai[pilihan_tipe]
-        kamar_cocok = next((k for k in st.session_state.kamar_data if k["Tipe Kamar"] == pilihan_tipe and k["Status"] == "🟩 Tersedia" and k["No Kamar"].startswith(lantai_target)), None)
-        
-        if kamar_cocok:
-            st.success(f"Kamar Ready! Kamu mendapatkan tipe **{pilihan_tipe}** dengan **No. {kamar_cocok['No Kamar']}** di Lantai {lantai_target}.")
-        else:
-            st.error(f"Waduh, tipe kamar {pilihan_tipe} di Lantai {lantai_target} saat ini sedang penuh.")
 
         st.markdown("---")
         st.subheader("🎁 Mau Tambah Fasilitas Ekstra?")
