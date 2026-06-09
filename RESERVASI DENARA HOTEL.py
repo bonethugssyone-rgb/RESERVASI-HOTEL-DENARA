@@ -5,10 +5,7 @@ from datetime import datetime, date
 # Seting awal tampilan web hotelnya biar dapet icon dan nama di tab browser
 st.set_page_config(page_title="Denara Hotel", layout="wide", page_icon="🏨")
 
-# ==========================================
-# GAYA-GAYAAN INTERFACE (BIAR PINK ESTETIK)
-# ==========================================
-# Di sini kita mainan CSS dikit biar warna aplikasinya serba pink gemes dan gak ngebosenin
+# tampilannya agar tidak monnoton(menggunkan css)
 st.markdown("""
 <style>
     .main { background-color: #FFF6F9; }
@@ -47,10 +44,14 @@ FASILITAS_KAMAR = {
 # Menu makanan buat room service beserta harganya yang ramah kantong
 MENU_MAKANAN = {
     "Nasi Goreng Kampung": 35000, 
-    "Mie Goreng Cabe Ijo": 30000, 
+    "Ayam Goreng Sambal Matah": 30000, 
     "Ayam Goreng Serundeng": 40000, 
     "Es Teh Manis Premium": 12000, 
-    "Kopi Susu Aren": 20000
+    "Kopi Susu Aren": 20000,
+    "Kwetiaw Goreng": 20000,
+    "Indomie Goreng + telur": 19000,
+    "Butterscotch Latte": 22000,
+    "Nasi Ayam Geprek": 23000
 }
 
 # Tempat nyimpen status kamar biar datanya gak ilang pas aplikasinya di-refresh
