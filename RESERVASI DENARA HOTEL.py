@@ -434,6 +434,7 @@ elif pilihan_menu == "💳 Pembayaran Reservasi Hotel":
             st.rerun()
 
             # merefresh agar angka berubah (autoo update timer)
+            import time
             time.sleep(1)
             st.rerun()
                        
