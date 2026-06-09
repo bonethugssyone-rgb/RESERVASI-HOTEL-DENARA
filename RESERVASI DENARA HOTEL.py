@@ -153,22 +153,18 @@ if pilihan_menu == "🏠 Dashboard":
             st.markdown(f'<div class="review-box"><b>{u["nama"]}</b> (⭐ {u["rating"]})<br><small>"{u["komentar"]}"</small></div>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-# --- 2. RESERVASI BARU ---
+# -- MENU 2. Reservasi Baru --
 elif pilihan_menu == "📝 Reservasi Baru":
-    st.title("📝 Form Reservasi Hotel")
+    st.title("📝 Registrasi Menginap (Reservasi Baru)")
     col_kiri, col_kanan = st.columns([1.5, 1])
 
-    # Kolom kiri diisi inputan biodata tamu dan tanggal booking
     with col_kiri:
         st.subheader("Isi Data Diri Dulu Yuk")
         nama = st.text_input("Nama Lengkap (Sesuai KTP)")
-        
-        # Di sini format no HP otomatis langsung dikasih '+62 ', jadi tamu tinggal lanjutin ngetik aja
         hp = st.text_input("Nomor WhatsApp Aktif", value="+62 ")
         email = st.text_input("Alamat Email", value="@gmail.com")
         pilihan_tipe = st.selectbox("Mau Kamar Tipe Apa?", list(TARIF_KAMAR.keys()))
         
-        # Looping buat nampilin tag fasilitas otomatis sesuai tipe kamar yang dipilih
         st.markdown("**Fasilitas Yang Bakal Kamu Dapet:**")
         for fas in FASILITAS_KAMAR[pilihan_tipe]:
             st.markdown(f'<span class="facility-tag">✔️ {fas}</span>', unsafe_allow_html=True)
@@ -178,13 +174,21 @@ elif pilihan_menu == "📝 Reservasi Baru":
         tgl_out = st.date_input("Tanggal Check-Out", date.today() + pd.Timedelta(days=1))
         pilihan_late = st.selectbox("Mau Keluar Jam Berapa?", ["Normal Check-Out", "Late Check-Out (+Rp 50.000)"])
 
-    # Kolom kanan isinya rekomendasi cerdas dari bot dan pilihan add-on (fasilitas tambahan)
     with col_kanan:
+        # --- TAMBAHAN: STATUS KAMAR ---
+        with st.expander("🔍 Cek Ketersediaan Kamar Terkini"):
+            st.write("Daftar status kamar saat ini:")
+            for k in st.session_state.kamar_data:
+                # Menyesuaikan tampilan status sesuai permintaan Anda
+                display_status = "Tersedia" if "Tersedia" in k["Status"] else "Booking"
+                color = "green" if display_status == "Tersedia" else "red"
+                st.markdown(f"- Kamar **{k['No Kamar']}** ({k['Tipe Kamar']}): :{'green' if display_status == 'Tersedia' else 'red'}[**{display_status}**]")
+
+        st.markdown("---")
         st.subheader("🤖 Saran Kamar Dari Bot")
         saran = "Standard Room" if jml_tamu <= 2 else ("Superior Room" if jml_tamu <= 4 else "Suite Room")
         st.info(f"Karena kamu bawa {jml_tamu} orang, cocoknya pilih **{saran}**.")
         
-        # Nyari kamar yang cocok di lantai yang sesuai (Lantai 1-4) dan statusnya harus ijo (Tersedia)
         pemetaan_lantai = {"Standard Room": "1", "Superior Room": "2", "Deluxe Room": "3", "Suite Room": "4"}
         lantai_target = pemetaan_lantai[pilihan_tipe]
         kamar_cocok = next((k for k in st.session_state.kamar_data if k["Tipe Kamar"] == pilihan_tipe and k["Status"] == "🟩 Tersedia" and k["No Kamar"].startswith(lantai_target)), None)
@@ -197,7 +201,6 @@ elif pilihan_menu == "📝 Reservasi Baru":
         st.markdown("---")
         st.subheader("🎁 Mau Tambah Fasilitas Ekstra?")
         addons = []
-        # Berbagai macam checkbox fasilitas tambahan, kalau dicentang otomatis nambah biaya
         if st.checkbox("Sarapan Pagi Sepuasnya (+Rp 50.000)"): addons.append("Breakfast")
         if st.checkbox("Antar Jemput Bandara (+Rp 150.000)"): addons.append("Airport Pickup")
         if st.checkbox("Ekstra Kasur / Extra Bed (+Rp 200.000)"): addons.append("Extra Bed")
@@ -207,12 +210,10 @@ elif pilihan_menu == "📝 Reservasi Baru":
         if st.checkbox("Akses Layanan Netflix & Disney+ Premium (+Rp 30.000)"): addons.append("Streaming Apps")
         if st.checkbox("Rental Skuter Listrik Seharian (+Rp 75.000)"): addons.append("Electric Scooter")
 
-        # Tombol submit buat mindahin data ke antrian checkout billing
         if st.button("Booking & Lanjut Ke Pembayaran ➡️", type="primary"):
             if not nama or not kamar_cocok or tgl_out <= tgl_in or email == "@gmail.com" or hp == "+62 ":
                 st.error("Isi formnya yang bener dong, pastikan semua kolom data dan nomor handphone sudah terisi lengkap.")
             else:
-                # Kalkulasi total harga seluruh fasilitas tambahan yang dipilih tamu
                 biaya_extra_awal = (
                     (50000 if "Late" in pilihan_late else 0) + 
                     (50000 if "Breakfast" in addons else 0) + 
@@ -225,7 +226,6 @@ elif pilihan_menu == "📝 Reservasi Baru":
                     (75000 if "Electric Scooter" in addons else 0)
                 )
                 
-                # Masukin data ke temporary session state biar bisa dibaca di menu pembayaran
                 st.session_state.proses_checkout = {
                     "id_invoice": f"RSV-{datetime.now().strftime('%Y%m%d%H%M%S')}",
                     "nama": nama, "hp": hp, "email": email, "kamar": kamar_cocok,
@@ -234,8 +234,6 @@ elif pilihan_menu == "📝 Reservasi Baru":
                 }
                 st.session_state.voucher_terpasang = "" 
                 st.success("Sip! Data udah kesimpen, gass ke sub-menu 'Pembayaran Tiket' buat memilih opsi pembayaran.")
-
-# --- 3. KATALOG KAMAR ---
 elif pilihan_menu == "🏨 Katalog Kamar":
     st.title("🏨 Katalog Pilihan & Spesifikasi Eksklusif Kamar")
     st.write("Temukan kenyamanan terbaik selama menginap di Denara Hotel:")
