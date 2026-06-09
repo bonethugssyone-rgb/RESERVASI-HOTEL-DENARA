@@ -301,6 +301,9 @@ elif pilihan_menu == "🗺️ Denah Kamar":
 # --- 5. PEMBAYARAN TIKET RESERVASI ---
 elif pilihan_menu == "💳 Pembayaran Reseervasi Hotel":
     st.title("💳 Menu Pembayaran Billing Kamar")
+    # wadah timer
+    timer_placeholder = st.empty()
+    
     # Validasi biar gak ada tamu ilegal yang masuk menu ini tanpa ngisi form reservasi dulu
     if "proses_checkout" not in st.session_state:
         st.warning("Belum ada antrian kamar yang mau dibayar nih. Buka menu 'Reservasi Baru' dulu ya.")
@@ -308,26 +311,19 @@ elif pilihan_menu == "💳 Pembayaran Reseervasi Hotel":
 
     # --- LOGIKA AUTO-CANCEL 5 MENIT(DENGAN DETIK) ---
     dt = st.session_state.proses_checkout
-    selisih_detik = (datetime.now() - dt["waktu_booking"]).total_seconds()
-    batas_detik = 300 # 5 menit dalam detik
-    
-    if selisih_detik > batas_detik:
-        del st.session_state.proses_checkout
-        st.error("Waktu Pembayaran Habis!")
-        st.rerun() # refresh agar notifikasi muncul
-
-    #hitung sisa waktu
-    sisa_detik = batas_detik - int(selisih_detik)
-    menit_tersisa  = sisa_detik // 60
-    detik_tersisa = sisa_detik % 60
-
-    #tampilan countdown
-    st.warning(f"Harap Selesaikan Pembayaran Dalam: **{menit_tersisa} menit {detik_tersisa} detik** lagi.")
-
-    # agar halaman refresh otomatis setiap detik 
     import time
-    time.sleep(1)
-    st.rerun()
+    selisih_detik = (datetime.now() - dt["waktu_booking"]).total_seconds()
+    batas_detik = 300
+    sisa_detik = batas_detik - int(selisih_detik)
+
+    if sisa_detik <= 0:
+        del st.session_state.proses_checkout
+        st.error("⚠️ Waktu Pembayaran Habis!")
+        st.rerun()
+    else:
+        # menampilkan timer
+        timer_placeholder.warning("⏳ Harap Selesaikan Pembayaran Dalam: **{sisa_detik // 60} menit {sisa_detik % 60} detik** lagi.")
+    
     # ----------------------------------
 
     # Ngitung berapa malam durasi menginap berdasarkan selisih tanggal check-in & check-out
@@ -435,7 +431,11 @@ elif pilihan_menu == "💳 Pembayaran Reseervasi Hotel":
             del st.session_state.proses_checkout # Hapus data temporary biar bersih
             st.success("Pembayaran Berhasil Diterima! Kamar aman dipesan. Sisa tagihan (jika ada) akan dilunasi saat check-out.")
             st.rerun()
-           
+
+            # merefresh agar angka berubah (autoo update timer)
+            time.sleep(1)
+            st.rerun()
+                       
 # --- 6. CEK DETAIL & CHECK-OUT MANDIRI ---
 elif pilihan_menu == "🔍 Cek Detail & Check-Out":
     st.title("🔍 Menu Cek Data & Check-Out Mandiri (Akses Tamu)")
