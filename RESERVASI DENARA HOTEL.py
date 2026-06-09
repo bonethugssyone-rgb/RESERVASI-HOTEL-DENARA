@@ -708,23 +708,34 @@ elif pilihan_menu == "⭐ Ulasan Kepuasan":
 
     # Form input ulasan
     with st.expander("📝 Klik di sini untuk menulis ulasan baru", expanded=True):
-        with st.form("form_ulasan", clear_on_submit=True):
-            nama_tamu = st.text_input("Nama atau Nomor Kamar")
-            skor_rating = st.slider("Berapa Bintang Untuk Kami?", 1, 5, 5, help="1=Buruk, 5=Sangat Puas")
-            komentar_tamu = st.text_area("Tulis kesan-pesan kamu di sini:")
+       with st.form("form_ulasan", clear_on_submit=True):
+    nama_tamu = st.text_input("Nama atau Nomor Kamar")
+    
+    # Custom Star Selector
+    st.write("Berapa Bintang Untuk Kami?")
+    col_bintang = st.columns(5)
+    for i in range(5):
+        if col_bintang[i].button("⭐", key=f"star_{i+1}"):
+            st.session_state.temp_rating = i + 1
+            st.rerun()
             
-            submit = st.form_submit_button("Kirim Review ✨")
-            if submit:
-                if nama_tamu and komentar_tamu:
-                    st.session_state.ulasan_log.append({
-                        "nama": nama_tamu, 
-                        "rating": skor_rating, 
-                        "komentar": komentar_tamu
-                    })
-                    st.success("Terima kasih telah berbagi pengalaman dengan kami!")
-                else:
-                    st.error("Mohon lengkapi nama dan komentar kamu ya.")
-
+    st.info(f"Rating terpilih: {st.session_state.temp_rating} Bintang")
+    
+    komentar_tamu = st.text_area("Tulis kesan-pesan kamu:")
+    
+    if st.form_submit_button("Kirim Review ✨"):
+        if nama_tamu and st.session_state.temp_rating > 0:
+            st.session_state.ulasan_log.append({
+                "nama": nama_tamu, 
+                "rating": st.session_state.temp_rating, 
+                "komentar": komentar_tamu
+            })
+            st.balloons()
+            st.success("Terima kasih telah berbagi pengalaman dengan kami")
+            st.session_state.temp_rating = 0 # Reset rating
+        else:
+            st.error("Jangan lupa isi nama dan pilih bintangnya ya!")
+            
     st.markdown("---")
     st.subheader("💬 Apa Kata Tamu Lain?")
 
