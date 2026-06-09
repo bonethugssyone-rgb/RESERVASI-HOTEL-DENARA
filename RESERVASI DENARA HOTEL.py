@@ -248,7 +248,7 @@ elif pilihan_menu == "📝 Reservasi Baru":
                     "check_out": str(tgl_out),
                     "add_on": addons, 
                     "late_checkout": pilihan_late, 
-                    "biaya_ekstra_total": biaya_extra_awal
+                    "biaya_ekstra_total": biaya_extra_awal,
                     "waktu_booking" : datetime.now() # tambahkan untuk waktu pembayaran
                 }
                 st.session_state.voucher_terpasang = "" 
@@ -426,10 +426,12 @@ elif pilihan_menu == "💳 Pembayaran Tiket":
             del st.session_state.proses_checkout # Hapus data temporary biar bersih
             st.success("Pembayaran Berhasil Diterima! Kamar aman dipesan. Sisa tagihan (jika ada) akan dilunasi saat check-out.")
             st.rerun()
+            # refresh otomatis agar sisa waktu detik terlihat berjalan
+            import time
+            time.sleep(1)
+            st.rerun()
 
-# ==========================================
-# GANTI BAGIAN SUB-MENU CEK DETAIL & CHECK-OUT DENGAN KODE DI BAWAH INI
-# ==========================================
+
 
 # --- 6. CEK DETAIL & CHECK-OUT MANDIRI ---
 elif pilihan_menu == "🔍 Cek Detail & Check-Out":
