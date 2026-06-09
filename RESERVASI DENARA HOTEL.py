@@ -113,7 +113,7 @@ if menu_utama == "🏠 Dashboard": pilihan_menu = "🏠 Dashboard"
 elif menu_utama == "🏨 Manajemen Kamar":
     pilihan_menu = st.sidebar.radio("Sub-Menu Kamar", ["📝 Reservasi Baru", "🏨 Katalog Kamar", "🗺️ Denah Kamar"])
 elif menu_utama == "💳 Area Transaksi Tamu":
-    pilihan_menu = st.sidebar.radio("Sub-Menu Transaksi", ["💳 Pembayaran Tiket", "🔍 Cek Detail & Check-Out", "📜 Histori & Pembatalan"])
+    pilihan_menu = st.sidebar.radio("Sub-Menu Transaksi", ["💳 Pembayaran Reservasi Hotel", "🔍 Cek Detail & Check-Out", "📜 Histori & Pembatalan"])
 elif menu_utama == "🍽️ Room Service":
     pilihan_menu = st.sidebar.radio("Sub-Menu Room Service", ["🍽️ Pesan Makanan", "💳 Bayar Room Service"])
 elif menu_utama == "⭐ Penilaian Hotel": pilihan_menu = "⭐ Ulasan Kepuasan"
@@ -299,7 +299,7 @@ elif pilihan_menu == "🗺️ Denah Kamar":
                     st.error(f"🟨 {detail['No Kamar']}\n(Ada yang booking)")
 
 # --- 5. PEMBAYARAN TIKET RESERVASI ---
-elif pilihan_menu == "💳 Pembayaran Tiket":
+elif pilihan_menu == "💳 Pembayaran Reseervasi Hotel":
     st.title("💳 Menu Pembayaran Billing Kamar")
     # Validasi biar gak ada tamu ilegal yang masuk menu ini tanpa ngisi form reservasi dulu
     if "proses_checkout" not in st.session_state:
@@ -309,17 +309,25 @@ elif pilihan_menu == "💳 Pembayaran Tiket":
     # --- LOGIKA AUTO-CANCEL 5 MENIT(DENGAN DETIK) ---
     dt = st.session_state.proses_checkout
     selisih_detik = (datetime.now() - dt["waktu_booking"]).total_seconds()
-    batas_detik = 5 * 60 # 5 menit dalam detik
+    batas_detik = 300 # 5 menit dalam detik
     
     if selisih_detik > batas_detik:
-        del st.session_state.proses_checkout # Hapus data checkout otomatis
-        st.error("⚠️ Waktu pembayaran Anda sudah habis. Reservasi dibatalkan, Silakan buat ulang pesanan.")
-        st.stop()
-    else:
-        sisa_detik = batas_detik - int(selisih_detik)
-        menit_tersisa = sisa_detik // 60
-        detik_tersisa = sisa_detik % 60
-        st.warning(f"⏳ Harap Selesaikan Pembayaran Dalam : **{menit_tersisa} menit {detik_tersisa} detik** lagi.")
+        del st.session_state.proses_checkout
+        st.error("Waktu Pembayaran Habis!")
+        st.rerun() # refresh agar notifikasi muncul
+
+    #hitung sisa waktu
+    sisa_detik = batas_detik - int(selisih_detik)
+    menit_tersisa  = sisa_detik // 60
+    detik_tersisa = sisa_detik % 60
+
+    #tampilan countdown
+    st.warning(f"Harap Selesaikan Pembayaran Dalam: **{menit_tersisa} menit {detik_tersisa} detik** lagi.")
+
+    # agar halaman refresh otomatis setiap detik 
+    import time
+    time.sleep(1)
+    st.rerun()
     # ----------------------------------
 
     # Ngitung berapa malam durasi menginap berdasarkan selisih tanggal check-in & check-out
@@ -427,13 +435,7 @@ elif pilihan_menu == "💳 Pembayaran Tiket":
             del st.session_state.proses_checkout # Hapus data temporary biar bersih
             st.success("Pembayaran Berhasil Diterima! Kamar aman dipesan. Sisa tagihan (jika ada) akan dilunasi saat check-out.")
             st.rerun()
-            # refresh otomatis agar sisa waktu detik terlihat berjalan
-            import time
-            time.sleep(1)
-            st.rerun()
-
-
-
+           
 # --- 6. CEK DETAIL & CHECK-OUT MANDIRI ---
 elif pilihan_menu == "🔍 Cek Detail & Check-Out":
     st.title("🔍 Menu Cek Data & Check-Out Mandiri (Akses Tamu)")
