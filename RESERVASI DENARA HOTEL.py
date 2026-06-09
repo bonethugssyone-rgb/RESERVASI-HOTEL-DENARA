@@ -304,7 +304,8 @@ elif pilihan_menu == "💳 Pembayaran Reservasi Hotel":
     if "proses_checkout" not in st.session_state:
         st.warning("Belum ada antrian kamar yang mau dibayar nih. Buka menu 'Reservasi Baru' dulu ya.")
         st.stop()
-        
+
+    dt = st.session_state.proses_checkout
     # Ngitung berapa malam durasi menginap berdasarkan selisih tanggal check-in & check-out
     malam = max(1, (datetime.strptime(dt["check_out"], "%Y-%m-%d") - datetime.strptime(dt["check_in"], "%Y-%m-%d")).days)
     harga_pokok = TARIF_KAMAR.get(dt["tipe"], 0) * malam
