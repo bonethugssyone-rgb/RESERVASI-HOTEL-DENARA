@@ -249,7 +249,7 @@ elif pilihan_menu == "📝 Reservasi Baru":
                     "add_on": addons, 
                     "late_checkout": pilihan_late, 
                     "biaya_ekstra_total": biaya_extra_awal
-                    "waktu_booking : datetime.now() # tambahkan untuk waktu pembayaran
+                    "waktu_booking" : datetime.now() # tambahkan untuk waktu pembayaran
                 }
                 st.session_state.voucher_terpasang = "" 
                 st.success("Sip! Data udah kesimpen, gass ke sub-menu 'Pembayaran Tiket' buat memilih opsi pembayaran.")
