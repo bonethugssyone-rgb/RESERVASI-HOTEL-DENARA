@@ -176,7 +176,7 @@ elif pilihan_menu == "📝 Reservasi Baru":
         kamar_terpilih = next(k for k in kamar_sesuai_tipe if k['No Kamar'] == pilihan_no_kamar)
 
         # cek status kamar secara real time
-         if "Tersedia" in kamar_terpilih["Status"]:
+        if "Tersedia" in kamar_terpilih["Status"]:
             st.success("Status: Kamar ini tersedia untuk dipesan.")
         else:
             st.error("Status: Mohon maaf, kamar ini sudah dibooking.")
