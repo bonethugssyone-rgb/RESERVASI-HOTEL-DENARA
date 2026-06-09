@@ -708,7 +708,6 @@ elif pilihan_menu == "⭐ Ulasan Kepuasan":
 
     # Form input ulasan
     with st.expander("📝 Klik di sini untuk menulis ulasan baru", expanded=True):
-       with st.form("form_ulasan", clear_on_submit=True):
     nama_tamu = st.text_input("Nama atau Nomor Kamar")
     
     # Custom Star Selector
