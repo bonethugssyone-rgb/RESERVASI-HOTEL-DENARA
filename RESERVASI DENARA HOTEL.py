@@ -166,13 +166,13 @@ elif pilihan_menu == "📝 Reservasi Baru":
         # pilih tipe kamar
         pilihan_tipe = st.selectbox("Mau Kamar Tipe Apa?", list(TARIF_KAMAR.keys()))
 
-        # ambil semua kamar sesuai tipe yang dipilih
+        # memfilter kamar : hanya mengambil kamar yang sesuai tipe
         kamar_sesuai_tipe = [k for k in st.session_state.kamar_data if k["Tipe Kamar"] == pilihan_tipe]
         
         #pilihan no kamar (menampilkan no kamar)
         pilihan_no_kamar = st.selectbox("Pilih Nomor Kamar:", [k['No Kamar'] for k in kamar_sesuai_tipe])
 
-        #cari detail kamar terpilih
+        #ambil detail kamar terpilih
         kamar_terpilih = next(k for k in kamar_sesuai_tipe if k['No Kamar'] == pilihan_no_kamar)
 
         # cek status kamar secara real time
@@ -222,7 +222,7 @@ elif pilihan_menu == "📝 Reservasi Baru":
         if st.checkbox("Rental Skuter Listrik Seharian (+Rp 75.000)"): addons.append("Electric Scooter")
 
         if st.button("Booking & Lanjut Ke Pembayaran ➡️", type="primary"):
-            if not nama or not kamar_cocok or tgl_out <= tgl_in or email == "@gmail.com" or hp == "+62 ":
+            if not nama or not kamar_terpilih or tgl_out <= tgl_in or email == "@gmail.com" or hp == "+62 ":
                 st.error("Isi formnya yang bener dong, pastikan semua kolom data dan nomor handphone sudah terisi lengkap.")
             else:
                 biaya_extra_awal = (
