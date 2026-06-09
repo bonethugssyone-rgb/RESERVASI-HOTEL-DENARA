@@ -724,7 +724,6 @@ elif pilihan_menu == "⭐ Ulasan Kepuasan":
             })
             st.balloons()
             st.success("Terima kasih telah berbagi pengalaman dengan kami")
-            st.session_state.temp_rating = 0 # Reset rating
         else:
             st.error("Jangan lupa isi nama dan pilih bintangnya ya!")
             
