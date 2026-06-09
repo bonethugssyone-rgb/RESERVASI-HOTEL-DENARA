@@ -706,26 +706,36 @@ elif pilihan_menu == "⭐ Ulasan Kepuasan":
     st.title("⭐ Kotak Kepuasan & Review Tamu")
     st.write("Bagikan pengalaman menginapmu! Feedback kamu sangat berharga bagi kami.")
 
-    # menggunakan radio button horizontal sebagai pemilih bintang
-    skor_rating = st.radio(
-        "Berapa Bintang Untuk Kami",
-        options=[1, 2, 3, 4, 5],
-        format_func=lambda x: "⭐" * x,
-        horizontal =True,
-        index=4 # default 5 bintang
-    )
-    komentar_tamu = st.text_area("Tulis kesan-pesan kamu:")
-    if st.form_submit_button("Kirim Review ✨"):
-        if nama_tamu and komentar_tamu:
-            st.session_state.ulasan_log.append({
-                "nama": nama_tamu, 
-                "rating": skor_rating, 
-                "komentar": komentar_tamu
-            })
-            st.balloons()
-            st.success("Terima kasih telah berbagi pengalaman dengan kami")
-        else:
-            st.error("Jangan lupa isi nama dan pilih bintangnya ya!")
+    # Pastikan 'with st.form' dimulai di sini
+    with st.form("form_ulasan", clear_on_submit=True):
+        nama_tamu = st.text_input("Nama atau Nomor Kamar")
+        
+        # Rating dengan Radio Button (Sudah sesuai aturan form)
+        skor_rating = st.radio(
+            "Berapa Bintang Untuk Kami?",
+            options=[1, 2, 3, 4, 5],
+            format_func=lambda x: "⭐" * x,
+            horizontal=True,
+            index=4
+        )
+        
+        komentar_tamu = st.text_area("Tulis kesan-pesan kamu:")
+        
+        # TOMBOL HARUS DI DALAM INDENTASI 'with st.form'
+        submit_button = st.form_submit_button("Kirim Review ✨")
+        
+        # ATAU tepat di bawahnya jika sudah keluar blok 'with'
+        if submit_button:
+            if nama_tamu and komentar_tamu:
+                st.session_state.ulasan_log.append({
+                    "nama": nama_tamu, 
+                    "rating": skor_rating, 
+                    "komentar": komentar_tamu
+                })
+                st.balloons()
+                st.success("Terima kasih telah berbagi pengalaman dengan kami")
+            else:
+                st.error("Jangan lupa isi nama dan komentar ya!")
             
     st.markdown("---")
     st.subheader("💬 Apa Kata Tamu Lain?")
