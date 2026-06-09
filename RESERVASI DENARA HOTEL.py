@@ -203,9 +203,12 @@ elif pilihan_menu == "📝 Reservasi Baru":
 
         st.markdown("---")
         st.subheader("🤖 Saran Kamar Dari Bot")
-        saran = "Standard Room" if jml_tamu <= 2 else ("Superior Room" if jml_tamu <= 4 else "Suite Room")
+        if jml_tamu <= 2: saran = "Standard Room"
+        elif jml_tamu <= 3: saran = "Superior Room"
+        elif jml_tamu <= 4: saran = "Deluxe Room"
+        else: saran = "Suite Room"
         st.info(f"Karena kamu bawa {jml_tamu} orang, cocoknya pilih **{saran}**.")
-
+        
         st.markdown("---")
         st.subheader("🎁 Mau Tambah Fasilitas Ekstra?")
         addons = []
