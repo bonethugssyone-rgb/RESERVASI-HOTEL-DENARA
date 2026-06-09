@@ -708,7 +708,7 @@ elif pilihan_menu == "⭐ Ulasan Kepuasan":
 
     # menggunakan radio button horizontal sebagai pemilih bintang
     skor_rating = st.radio(
-        "Berapa Bintang Untuk Kami"
+        "Berapa Bintang Untuk Kami",
         options=[1, 2, 3, 4, 5],
         format_func=lambda x: "⭐" * x,
         horizontal =True,
