@@ -170,7 +170,7 @@ elif pilihan_menu == "📝 Reservasi Baru":
         kamar_sesuai_tipe = [k for k in st.session_state.kamar_data if k["Tipe Kamar"] == pilihan_tipe]
         
         #pilihan no kamar (menampilkan no kamar)
-        no_kamar = st.selectbox("Pilih Nomor Kamar:: [k['No Kamar']] for k kamar_sesuai_tipe])
+        no_kamar = st.selectbox("Pilih Nomor Kamar:", [k['No Kamar']] for k kamar_sesuai_tipe])
                                 
         #cari detail kamar terpilih
         kamar_terpilih = next(k for k in kamar_sesuai_tipe if k['No Kamar'] for k pilihan_no_kamar)
