@@ -173,8 +173,8 @@ elif pilihan_menu == "📝 Reservasi Baru":
         pilihan_no_kamar = st.selectbox("Pilih Nomor Kamar:", [k['No Kamar'] for k in kamar_sesuai_tipe])
 
         #cari detail kamar terpilih
-        kamar_terpilih = next(k for k in kamar_sesuai_tipe if k['No Kamar'] for k pilihan_no_kamar)
-        
+        kamar_terpilih = next(k for k in kamar_sesuai_tipe if k['No Kamar'] == pilihan_no_kamar)
+
         # cek status kamar secara real time
          if "Tersedia" in kamar_terpilih["Status"]:
             st.success("Status: Kamar ini tersedia untuk dipesan.")
