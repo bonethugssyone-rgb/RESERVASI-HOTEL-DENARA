@@ -239,9 +239,17 @@ elif pilihan_menu == "📝 Reservasi Baru":
                 
                 st.session_state.proses_checkout = {
                     "id_invoice": f"RSV-{datetime.now().strftime('%Y%m%d%H%M%S')}",
-                    "nama": nama, "hp": hp, "email": email, "kamar": kamar_cocok,
-                    "tipe": pilihan_tipe, "check_in": str(tgl_in), "check_out": str(tgl_out),
-                    "add_on": addons, "late_checkout": pilihan_late, "biaya_ekstra_total": biaya_extra_awal
+                    "nama": nama, 
+                    "hp": hp, 
+                    "email": email, 
+                    "kamar": kamar_cocok,
+                    "tipe": pilihan_tipe, 
+                    "check_in": str(tgl_in), 
+                    "check_out": str(tgl_out),
+                    "add_on": addons, 
+                    "late_checkout": pilihan_late, 
+                    "biaya_ekstra_total": biaya_extra_awal
+                    "waktu_booking : datetime.now() # tambahkan untuk waktu pembayaran
                 }
                 st.session_state.voucher_terpasang = "" 
                 st.success("Sip! Data udah kesimpen, gass ke sub-menu 'Pembayaran Tiket' buat memilih opsi pembayaran.")
@@ -296,6 +304,28 @@ elif pilihan_menu == "💳 Pembayaran Tiket":
     if "proses_checkout" not in st.session_state:
         st.warning("Belum ada antrian kamar yang mau dibayar nih. Buka menu 'Reservasi Baru' dulu ya.")
         st.stop()
+
+    # --- LOGIKA AUTO-CANCEL 5 MENIT(DENGAN DETIK) ---
+    dt = st.session_state.proses_checkout
+    selisih_detik = (datetime.now() - dt["waktu_booking"]).total_seconds()
+    batas_detik = 5 * 60 # 5 menit dalam detik
+    
+    if selisih_detik > batas_detik:
+        del st.session_state.proses_checkout # Hapus data checkout otomatis
+        st.error("⚠️ Waktu pembayaran Anda sudah habis. Reservasi dibatalkan, Silakan buat ulang pesanan.")
+        st.stop()
+    else:
+        sisa_detik = batas_detik - int(selisih_detik)
+        menit_tersisa = sisa_detik // 60
+        detik_tersisa = sisa_detik % 60
+        st.warning(f"⏳ Harap Selesaikan Pembayaran Dalam : **{menit_tersisa} menit {detik_tersisa} detik** lagi.")
+    # ----------------------------------
+
+    # Ngitung berapa malam durasi menginap berdasarkan selisih tanggal check-in & check-out
+    malam = max(1, (datetime.strptime(dt["check_out"], "%Y-%m-%d") - datetime.strptime(dt["check_in"], "%Y-%m-%d")).days)
+    harga_pokok = TARIF_KAMAR.get(dt["tipe"], 0) * malam
+    biaya_extra = dt["biaya_ekstra_total"]
+    subtotal = harga_pokok + biaya_extra
 
     dt = st.session_state.proses_checkout
     # Ngitung berapa malam durasi menginap berdasarkan selisih tanggal check-in & check-out
