@@ -704,24 +704,50 @@ elif pilihan_menu == "💳 Bayar Room Service":
 # --- 10. PENILAIAN HOTEL ---
 elif pilihan_menu == "⭐ Ulasan Kepuasan":
     st.title("⭐ Kotak Kepuasan & Review Tamu")
-    # Form input ulasan kepuasan pelanggan/tamu hotel biar ada interaksi feedback
-    with st.form("form_ulasan"):
-        nama_tamu = st.text_input("Nama Kamu / No Kamar")
-        skor_rating = st.slider("Kasih Rating Bintang Berapa? (1 - 5)", 1, 5, 5)
-        komentar_tamu = st.text_area("Tulis Kesan Pesan Selama Liburan Di Sini")
-        
-        if st.form_submit_button("Kirim Review"):
-            if nama_tamu and komentar_tamu:
-                st.session_state.ulasan_log.append({
-                    "nama": nama_tamu, "rating": skor_rating, "komentar": komentar_tamu
-                })
-                st.success("Makasih banyak ya ulasannya!")
-                st.rerun()
-            else:
-                st.error("Isi dulu review-nya.")
-                
-    st.subheader("Semua Kumpulan Review Tamu")
-    st.dataframe(pd.DataFrame(st.session_state.ulasan_log), use_container_width=True)
+    st.write("Bagikan pengalaman menginapmu! Feedback kamu sangat berharga bagi kami.")
+
+    # Form input ulasan
+    with st.expander("📝 Klik di sini untuk menulis ulasan baru", expanded=True):
+        with st.form("form_ulasan", clear_on_submit=True):
+            nama_tamu = st.text_input("Nama atau Nomor Kamar")
+            skor_rating = st.slider("Berapa Bintang Untuk Kami?", 1, 5, 5, help="1=Buruk, 5=Sangat Puas")
+            komentar_tamu = st.text_area("Tulis kesan-pesan kamu di sini:")
+            
+            submit = st.form_submit_button("Kirim Review ✨")
+            if submit:
+                if nama_tamu and komentar_tamu:
+                    st.session_state.ulasan_log.append({
+                        "nama": nama_tamu, 
+                        "rating": skor_rating, 
+                        "komentar": komentar_tamu
+                    })
+                    st.success("Terima kasih telah berbagi pengalaman dengan kami!")
+                else:
+                    st.error("Mohon lengkapi nama dan komentar kamu ya.")
+
+    st.markdown("---")
+    st.subheader("💬 Apa Kata Tamu Lain?")
+
+    # Menampilkan ulasan dalam bentuk kartu (Grid)
+    # Membalik list agar review terbaru muncul di atas
+    for u in reversed(st.session_state.ulasan_log):
+        with st.container():
+            # Menggunakan kolom untuk memisahkan rating dan nama
+            c1, c2 = st.columns([1, 4])
+            with c1:
+                # Menampilkan bintang visual
+                st.markdown(f"### {'⭐' * u['rating']}")
+            with c2:
+                st.markdown(f"**{u['nama']}**")
+            
+            st.markdown(f"*{u['komentar']}*")
+            st.markdown("---")
+
+    # Tambahan: Summary sederhana di sidebar
+    with st.sidebar:
+        st.subheader("📊 Statistik Rating")
+        avg_rating = sum([u['rating'] for u in st.session_state.ulasan_log]) / len(st.session_state.ulasan_log)
+        st.metric("Rata-rata Rating", f"{avg_rating:.1f} / 5.0")
 
 # --- 11. PUSAT BANTUAN ---
 elif pilihan_menu == "❓ Pusat Bantuan":
