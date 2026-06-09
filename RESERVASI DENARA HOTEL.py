@@ -309,22 +309,28 @@ elif pilihan_menu == "💳 Pembayaran Reservasi Hotel":
         st.warning("Belum ada antrian kamar yang mau dibayar nih. Buka menu 'Reservasi Baru' dulu ya.")
         st.stop()
 
-    # --- LOGIKA AUTO-CANCEL 5 MENIT(DENGAN DETIK) ---
     dt = st.session_state.proses_checkout
-    import time
-    selisih_detik = (datetime.now() - dt["waktu_booking"]).total_seconds()
     batas_detik = 300
+
+    # letakkan timer di sidebar agar tdak menumpuk di area utama
+    with st.sidebar:
+        st.header("Waktu Tersisa")
+        timer_placeholder = st.empty() # wadah khusus timer
+
+    # logika perhitungan waktu
+    selisih_detik = (datetime.now() - dt["waktu_booking"]).total_seconds()
     sisa_detik = batas_detik - int(selisih_detik)
 
     if sisa_detik <= 0:
         del st.session_state.proses_checkout
-        st.error("⚠️ Waktu Pembayaran Habis!")
+        st.error("Waktu Pembayaran Habis!")
         st.rerun()
     else:
-        # menampilkan timer
-        with timer_placeholder.container():
-            st.warning(f"⏳ Harap Selesaikan Pembayaran Dalam: **{sisa_detik // 60} menit {sisa_detik % 60} detik** lagi.")
+        #update angka di dalam placeholder tanpa membuat baris baru
+        timer_placeholder.metric("Sisa Waktu", f"{sisa_detik // 60}m {sisa_detik % 60}s")
     
+
+   
     # ----------------------------------
 
     # Ngitung berapa malam durasi menginap berdasarkan selisih tanggal check-in & check-out
