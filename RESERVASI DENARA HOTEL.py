@@ -95,7 +95,7 @@ if "ulasan_log" not in st.session_state:
     st.session_state.ulasan_log = [{"nama": "Andi Pratama", "rating": 5, "komentar": "Keren bgt, nginep di lantai 4 berasa eksklusif!"}]
 
 # ==========================================
-# SIDEBAR MENUS
+# SIDEBAR MENU
 # ==========================================
 # Bikin struktur menu utama di samping kiri pakai radio button
 st.sidebar.title("🏨 Denara Hotel")
@@ -322,7 +322,8 @@ elif pilihan_menu == "💳 Pembayaran Reservasi Hotel":
         st.rerun()
     else:
         # menampilkan timer
-        timer_placeholder.warning("⏳ Harap Selesaikan Pembayaran Dalam: **{sisa_detik // 60} menit {sisa_detik % 60} detik** lagi.")
+        with timer_placeholder.container():
+            st.warning("⏳ Harap Selesaikan Pembayaran Dalam: **{sisa_detik // 60} menit {sisa_detik % 60} detik** lagi.")
     
     # ----------------------------------
 
