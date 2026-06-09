@@ -242,7 +242,7 @@ elif pilihan_menu == "📝 Reservasi Baru":
                     "nama": nama, 
                     "hp": hp, 
                     "email": email, 
-                    "kamar": kamar_cocok,
+                    "kamar": kamar_terpilih,
                     "tipe": pilihan_tipe, 
                     "check_in": str(tgl_in), 
                     "check_out": str(tgl_out),
