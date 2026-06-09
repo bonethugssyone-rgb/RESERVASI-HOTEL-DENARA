@@ -299,7 +299,7 @@ elif pilihan_menu == "🗺️ Denah Kamar":
                     st.error(f"🟨 {detail['No Kamar']}\n(Ada yang booking)")
 
 # --- 5. PEMBAYARAN TIKET RESERVASI ---
-elif pilihan_menu == "💳 Pembayaran Reseervasi Hotel":
+elif pilihan_menu == "💳 Pembayaran Reservasi Hotel":
     st.title("💳 Menu Pembayaran Billing Kamar")
     # wadah timer
     timer_placeholder = st.empty()
