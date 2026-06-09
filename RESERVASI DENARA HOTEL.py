@@ -163,9 +163,26 @@ elif pilihan_menu == "📝 Reservasi Baru":
         nama = st.text_input("Nama Lengkap (Sesuai KTP)")
         hp = st.text_input("Nomor WhatsApp Aktif", value="+62 ")
         email = st.text_input("Alamat Email", value="@gmail.com")
+        # pilih tipe kamar
         pilihan_tipe = st.selectbox("Mau Kamar Tipe Apa?", list(TARIF_KAMAR.keys()))
+
+        # ambil semua kamar sesuai tipe yang dipilih
+        kamar_sesuai_tipe = [k for k in st.session_state.kamar_data if k["Tipe Kamar"] == pilihan_tipe]
         
+        #pilihan no kamar (menampilkan no kamar)
+        no_kamar = st.selectbox("Pilih Nomor Kamar:: [k['No Kamar']] for k kamar_sesuai_tipe])
+                                
+        #cari detail kamar terpilih
+        kamar_terpilih = next(k for k in kamar_sesuai_tipe if k['No Kamar'] for k pilihan_no_kamar)
+        
+        # cek status kamar secara real time
+         if "Tersedia" in kamar_terpilih["Status"]:
+            st.success("Status: Kamar ini tersedia untuk dipesan.")
+        else:
+            st.error("Status: Mohon maaf, kamar ini sudah dibooking.")
+            kamar_terpilih = None # Kunci agar tidak bisa lanjut ke proses selanjutnya
         st.markdown("**Fasilitas Yang Bakal Kamu Dapet:**")
+        
         for fas in FASILITAS_KAMAR[pilihan_tipe]:
             st.markdown(f'<span class="facility-tag">✔️ {fas}</span>', unsafe_allow_html=True)
             
