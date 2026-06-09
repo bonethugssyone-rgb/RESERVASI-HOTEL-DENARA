@@ -728,26 +728,20 @@ elif pilihan_menu == "⭐ Ulasan Kepuasan":
     st.markdown("---")
     st.subheader("💬 Apa Kata Tamu Lain?")
 
-    # Menampilkan ulasan dalam bentuk kartu (Grid)
-    # Membalik list agar review terbaru muncul di atas
     for u in reversed(st.session_state.ulasan_log):
         with st.container():
-            # Menggunakan kolom untuk memisahkan rating dan nama
-            c1, c2 = st.columns([1, 4])
-            with c1:
-                # Menampilkan bintang visual
-                st.markdown(f"### {'⭐' * u['rating']}")
-            with c2:
-                st.markdown(f"**{u['nama']}**")
+            # Membuat rating bintang dengan warna emas
+            # Rating 5 = ⭐⭐⭐⭐⭐, Rating 1 = ⭐
+            bintang = "⭐" * u['rating']
             
-            st.markdown(f"*{u['komentar']}*")
-            st.markdown("---")
-
-    # Tambahan: Summary sederhana di sidebar
-    with st.sidebar:
-        st.subheader("📊 Statistik Rating")
-        avg_rating = sum([u['rating'] for u in st.session_state.ulasan_log]) / len(st.session_state.ulasan_log)
-        st.metric("Rata-rata Rating", f"{avg_rating:.1f} / 5.0")
+            # Kita gunakan HTML/CSS agar terlihat lebih menonjol
+            st.markdown(f"""
+                <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFD700; margin-bottom: 10px;">
+                    <div style="font-size: 20px; color: #FFD700;">{bintang}</div>
+                    <p style="margin: 5px 0; font-size: 16px;"><b>{u['nama']}</b></p>
+                    <p style="margin: 0; font-style: italic; color: #555;">"{u['komentar']}"</p>
+                </div>
+            """, unsafe_allow_html=True)
 
 # --- 11. PUSAT BANTUAN ---
 elif pilihan_menu == "❓ Pusat Bantuan":
