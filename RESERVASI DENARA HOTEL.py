@@ -249,8 +249,7 @@ elif pilihan_menu == "📝 Reservasi Baru":
                     "check_out": str(tgl_out),
                     "add_on": addons, 
                     "late_checkout": pilihan_late, 
-                    "biaya_ekstra_total": biaya_extra_awal,
-                    "waktu_booking" : datetime.now() # tambahkan untuk waktu pembayaran
+                    "biaya_ekstra_total": biaya_extra_awal
                 }
                 st.session_state.voucher_terpasang = "" 
                 st.success("Sip! Data udah kesimpen, gass ke sub-menu 'Pembayaran Tiket' buat memilih opsi pembayaran.")
@@ -301,38 +300,11 @@ elif pilihan_menu == "🗺️ Denah Kamar":
 # --- 5. PEMBAYARAN TIKET RESERVASI ---
 elif pilihan_menu == "💳 Pembayaran Reservasi Hotel":
     st.title("💳 Menu Pembayaran Billing Kamar")
-    # wadah timer
-    timer_placeholder = st.empty()
-    
     # Validasi biar gak ada tamu ilegal yang masuk menu ini tanpa ngisi form reservasi dulu
     if "proses_checkout" not in st.session_state:
         st.warning("Belum ada antrian kamar yang mau dibayar nih. Buka menu 'Reservasi Baru' dulu ya.")
         st.stop()
-
-    dt = st.session_state.proses_checkout
-    batas_detik = 300
-
-    # letakkan timer di sidebar agar tdak menumpuk di area utama
-    with st.sidebar:
-        st.header("Waktu Tersisa")
-        timer_placeholder = st.empty() # wadah khusus timer
-
-    # logika perhitungan waktu
-    selisih_detik = (datetime.now() - dt["waktu_booking"]).total_seconds()
-    sisa_detik = batas_detik - int(selisih_detik)
-
-    if sisa_detik <= 0:
-        del st.session_state.proses_checkout
-        st.error("Waktu Pembayaran Habis!")
-        st.rerun()
-    else:
-        #update angka di dalam placeholder tanpa membuat baris baru
-        timer_placeholder.metric("Sisa Waktu", f"{sisa_detik // 60}m {sisa_detik % 60}s")
-    
-
-   
-    # ----------------------------------
-
+        
     # Ngitung berapa malam durasi menginap berdasarkan selisih tanggal check-in & check-out
     malam = max(1, (datetime.strptime(dt["check_out"], "%Y-%m-%d") - datetime.strptime(dt["check_in"], "%Y-%m-%d")).days)
     harga_pokok = TARIF_KAMAR.get(dt["tipe"], 0) * malam
