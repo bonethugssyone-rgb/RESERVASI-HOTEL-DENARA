@@ -693,7 +693,7 @@ elif pilihan_menu == "🔍 Cek Detail & Check-Out":
                     })
                     
                     st.session_state.reservasi_log.remove(tamu) # Hapus dari daftar tamu aktif
-                    st.success(Pelunasan dan check-out berhasil. Terima kasih telah menginap di Denara Hotel. Kami menantikan kunjungan Anda berikutnya.")
+                    st.success("Pelunasan dan check-out berhasil. Terima kasih telah menginap di Denara Hotel. Kami menantikan kunjungan Anda berikutnya.")
                     st.rerun()
         else:
             st.error("Data reservasi tidak ditemukan. Pastikan informasi yang dimasukkan sudah benar.")
