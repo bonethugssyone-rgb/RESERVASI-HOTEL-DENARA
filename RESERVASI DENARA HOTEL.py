@@ -747,7 +747,7 @@ elif pilihan_menu == "📜 Histori & Pembatalan":
                         "id": rsv["id"], "nama": rsv["nama"], "kamar": rsv["kamar"], "waktu_batal": datetime.now().strftime("%Y-%m-%d %H:%M")
                     })
                     st.session_state.reservasi_log.remove(rsv)
-                    st.success(Proses pembatalan reservasi berhasil diselesaikan.")
+                    st.success("Proses pembatalan reservasi berhasil diselesaikan.")
                     st.rerun()
             else:
                 st.error("Data booking aktif tidak ditemukan.")
