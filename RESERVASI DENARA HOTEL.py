@@ -952,7 +952,7 @@ elif pilihan_menu == "❓ Pusat Bantuan":
     with st.expander("⏱️ Jam Berapa Batas Waktu Check-In & Check-Out Standard?"):
         st.write("Masuk kamar jam 14:00 WIB yaa, kalau keluar maksimal jam 12:00 WIB.")
     with st.expander("💳 Bisa Bayar Pake QRIS Atau E-Wallet Gak?"):
-        st.write("Bisa bgt! Kita nerima Dana, Gopay, Ovo, sama Transfer VA Bank (Mandiri dan BCA).")
+        st.write("Bisa bgt! Kita nerima Dana, Gopay, Ovo, sama Transfer Virtual Account Bank (Mandiri dan BCA).")
 
 # --- 12. KONTAK LAYANAN SERVICE ---
 elif pilihan_menu == "📞 Kontak Layanan Service":
