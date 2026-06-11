@@ -10,8 +10,13 @@ st.markdown("""
 <style>
 
 /* Background utama */
-.stApp{
-    background-color:#FFF5F8;
+[data-testid="stAppViewContainer"]{
+    background: linear-gradient(
+        135deg,
+        #FFFDF8,
+        #FFF8F0,
+        #FFF3E8
+    );
 }
 
 /* Sidebar */
